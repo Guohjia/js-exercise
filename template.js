@@ -42,3 +42,4 @@ console.log(TemplateEngine(template, {
 }));
 //My skills:<p>none</p>
 
+//来源参考:http://blog.jobbole.com/56689/
