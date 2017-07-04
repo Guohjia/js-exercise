@@ -3,11 +3,15 @@
 var board = document.querySelector('.board')
 var nextChess='white'  //初始化接下来是哪方下棋
 var symbol=document.querySelector('.turn')
+window.onresize=function(){
+    
+}
 board.addEventListener('click',function(e){
     var clickX=e.clientX+window.scrollX  //踩坑一：因为小格子offsetLeft是相对于父元素board计算的，而clientX是相对于浏览器窗口计算的，因此出现滚动条并滚动会出现bug，所以要加上window.scrollX;scrollY同理;
     var clickY=e.clientY+window.scrollY  
     var coordinateX=e.target.offsetLeft
     var coordinateY=e.target.offsetTop
+    console.log(e.target.offsetParent)
     // console.log(clickX)
     console.log(clickY)
     // console.log(coordinateX)
