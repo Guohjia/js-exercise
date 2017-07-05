@@ -9,4 +9,4 @@
 * 要点：逻辑思维，正则的运用，数组api和字符串api的熟练运用
 
 ### 五子棋小游戏
-[预览][https://guohjia.github.io/js-exercise/Five-in-a-row/Five-in-a-row.html]
+[预览](https://guohjia.github.io/js-exercise/Five-in-a-row/Five-in-a-row.html)
