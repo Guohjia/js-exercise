@@ -7,3 +7,6 @@
          最后因为有for等复杂语句，加入新的正则进行判断，为这些复杂语句则不进行数组push（因为这些js代码不像（this.属性）有确切的值，直接导入数组就会报错），所以直接加入脚本执行;
          
 * 要点：逻辑思维，正则的运用，数组api和字符串api的熟练运用
+
+### 五子棋小游戏
+[预览][https://guohjia.github.io/js-exercise/Five-in-a-row/Five-in-a-row.html]
