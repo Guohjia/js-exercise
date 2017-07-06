@@ -5,14 +5,15 @@ function FiveInArow(board) {
     this.backBtn = document.querySelector('.back')
     this.restartBtn = document.querySelector('.restart')
     this.symbolNext.style.background = 'white'  //初始化接下来是白方下棋
+    this.gameOver=false
     this.initializeArray()
     this.bindEvents()
 }
 FiveInArow.prototype.initializeArray=function(){
-     this.dataStore=new Array(16) 
-    for(var x=0;x<16;x++){          //初始化数组,0为没有走过的，1为白棋走的，2为黑棋走的
-        this.dataStore[x]=new Array(12)
-        for(var y=0;y<12;y++){
+     this.dataStore=new Array(17) 
+    for(var x=0;x<=16;x++){          //初始化数组,0为没有走过的，1为白棋走的，2为黑棋走的
+        this.dataStore[x]=new Array(13)
+        for(var y=0;y<=12;y++){
             this.dataStore[x][y]=0  
         }
     }
@@ -27,9 +28,16 @@ FiveInArow.prototype.bindEvents = function (e) {
         // _this.length = _this.dataStoreX.length
         _this.newChess = document.createElement('div')
         _this.newChess.className = 'chess'
-        _this.positioning(_this.clickX, _this.clickY, _this.coordinateX, _this.coordinateY)
+        if(!_this.gameOver){
+            _this.positioning(_this.clickX, _this.clickY, _this.coordinateX, _this.coordinateY)
+        }else{
+            alert('游戏已经结束，不能再下棋了，请重新开始')
+        }
     })
     this.backBtn.addEventListener('click', function () {
+        if(_this.gameOver){
+            alert('游戏已经结束，不能再悔棋了，请重新开始')
+        }
         if (!_this.hasRegret) {
             _this.comeBack()
         }
@@ -40,9 +48,14 @@ FiveInArow.prototype.bindEvents = function (e) {
 }
 
 //下棋，插入元素
-FiveInArow.prototype.playChess = function () {
-    document.body.appendChild(this.newChess)
-    this.hasRegret = false; //悔棋标志，只能悔棋一次返回到上一步;输赢之后依然可以悔棋;
+FiveInArow.prototype.playChess = function (x,y) {
+        document.body.appendChild(this.newChess)
+        this.ifWin(x,y,this.dataStore[x][y])
+        if(this.gameOver){
+        this.hasRegret = true  //悔棋标志，只能悔棋一次返回到上一步;胜负已分，不再悔棋
+    }else{
+        this.hasRegret=false;
+    }
 }
 
 
@@ -70,7 +83,7 @@ FiveInArow.prototype.positioning = function (clickX, clickY, coordinateX, coordi
     }
     var x = (parseInt(this.newChess.style.left) - 336) / 40;//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
     var y =(parseInt(this.newChess.style.top ) - 115) / 42;
-     this.ifChess(x,y)
+    this.ifChess(x,y)
 }
 
 //判断将要下棋的位置是否已经存在棋子;
@@ -80,9 +93,9 @@ FiveInArow.prototype.ifChess = function (x,y) {
         return
     }else{
         this.colorSet(x,y)
-        this.playChess()
         this.x=x;
         this.y=y//记录最新下的一步棋子
+        this.playChess(x,y)
     }
 }
 
@@ -122,14 +135,100 @@ FiveInArow.prototype.reStart = function () {
         }
     }
     this.initializeArray() //数据清零,重新初始化数组;如果要清空的数组没有引用，空数组赋值无疑是简洁又高效的方法；如果需要保持原数组的属性，那就使用 length=0;而splice()的执行效率最低,而且会返回删除 的元素,即得到一个和原来一样的数组
+    this.gameOver=false
     if (this.symbolNext.style.background = 'black') {
         this.symbolNext.style.background = 'white';  //确保重新开始依然是白方优先;
     }
 }
 
-// FiveInArow.prototype.ifWin = function (chessColor) {  //5个连续的，颜色相同的，在同一坐标线上的
+FiveInArow.prototype.ifWin = function (x,y,chess) {
+    var count1 = 0;
+    var count2 = 0;
+    var count3 = 0;
+    var count4 = 0;
+    console.log(x)
+    console.log(y)
 
-// }
+    for(var i=x;i>=0;i--){
+        if(this.dataStore[i][y]!=chess){
+            break;
+        }else{
+            count1++
+        }
+    }
+    //往右边判断
+    for(var i=x+1;i<=16;i++){
+        if(this.dataStore[i][y]!=chess){
+            break;
+        }else{
+            count1++
+        }
+    }
+    //往上判断
+    for(var i=y;i>=0;i--){
+        if(this.dataStore[x][i]!=chess){
+            break;
+        }else{
+            count2++
+        }
+    }
+    //往下判断
+     for(var i=y+1;i<=12;i++){
+        if(this.dataStore[x][i]!=chess){
+            break;
+        }else{
+            count2++
+        }
+    }
+    // console.log(y)
+    //往左上判断
+    for(var i=x,j=y;i>=0&&j>=0;i--,j--){
+        if(this.dataStore[i][j]!==chess){
+            break
+        }else{
+            count3++
+        }
+    }
+    //往右下判断
+   
+    for(var i=x+1,j=y+1;i<=16&&j<=12;i++,j++){
+        if(this.dataStore[i][j]!==chess){
+            break
+        }else{
+            count3++
+        }
+    }
+    //往右上判断,x增加,y减小
+    for(var i=x,j=y;i<=16&&j>=0;i++,j--){
+         if(this.dataStore[i][j]!==chess){
+            break
+        }else{
+            count4++
+        }
+    }
+
+    //往左下判断,x减小,y增加
+    for(var i=x-1,j=y+1;i>=0&&j<=16;i--,j++){
+         if(this.dataStore[i][j]!=chess){
+            break
+        }else{
+            count4++
+        }
+    }
+
+    if(count1>=5||count2>=5||count3>=5||count4>=5){
+        this.gameOver=true
+        if(chess==1){
+            window.setTimeout(function(){
+                alert('白方胜')
+            },300)
+        }else{
+            window.setTimeout(function(){
+                alert('黑方胜')
+            },300)
+        }
+    }  
+}
 
 
 newFiveInArow = (function () {
