@@ -2,14 +2,21 @@ function FiveInArow(board) {
     this.board = board;
     // this.nextChess = 'white'  //初始化接下来是哪方下棋
     this.symbolNext = document.querySelector('.turn')  //下棋顺序控制
-    this.backBtn=document.querySelector('.back')
-    this.restartBtn=document.querySelector('.restart')
+    this.backBtn = document.querySelector('.back')
+    this.restartBtn = document.querySelector('.restart')
     this.symbolNext.style.background = 'white'  //初始化接下来是白方下棋
-    this.dataStoreX = [];
-    this.dataStoreY = [];
+    this.initializeArray()
     this.bindEvents()
 }
-
+FiveInArow.prototype.initializeArray=function(){
+     this.dataStore=new Array(16) 
+    for(var x=0;x<16;x++){          //初始化数组,0为没有走过的，1为白棋走的，2为黑棋走的
+        this.dataStore[x]=new Array(12)
+        for(var y=0;y<12;y++){
+            this.dataStore[x][y]=0  
+        }
+    }
+}
 FiveInArow.prototype.bindEvents = function (e) {
     var _this = this;
     this.board.addEventListener('click', function (e) {
@@ -17,28 +24,25 @@ FiveInArow.prototype.bindEvents = function (e) {
         _this.clickY = e.clientY + window.scrollY
         _this.coordinateX = e.target.offsetLeft
         _this.coordinateY = e.target.offsetTop
-        _this.length = _this.dataStoreX.length
+        // _this.length = _this.dataStoreX.length
         _this.newChess = document.createElement('div')
         _this.newChess.className = 'chess'
         _this.positioning(_this.clickX, _this.clickY, _this.coordinateX, _this.coordinateY)
-        _this.ifChess()
     })
-    this.backBtn.addEventListener('click',function(){
-        if(!_this.hasRegret){
+    this.backBtn.addEventListener('click', function () {
+        if (!_this.hasRegret) {
             _this.comeBack()
         }
     })
-    this.restartBtn.addEventListener('click',function(){
+    this.restartBtn.addEventListener('click', function () {
         _this.reStart()
     })
 }
 
 //下棋，插入元素
 FiveInArow.prototype.playChess = function () {
-    this.dataStoreX.push(this.newChess.style.left)
-    this.dataStoreY.push(this.newChess.style.top)
     document.body.appendChild(this.newChess)
-    this.hasRegret=false; //悔棋标志，只能悔棋一次返回到上一步;
+    this.hasRegret = false; //悔棋标志，只能悔棋一次返回到上一步;输赢之后依然可以悔棋;
 }
 
 
@@ -64,64 +68,68 @@ FiveInArow.prototype.positioning = function (clickX, clickY, coordinateX, coordi
         this.newChess.style.left = coordinateX + 20 + 'px'
         this.newChess.style.top = coordinateY + 21 + 'px'
     }
+    var x = (parseInt(this.newChess.style.left) - 336) / 40;//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
+    var y =(parseInt(this.newChess.style.top ) - 115) / 42;
+     this.ifChess(x,y)
 }
 
 //判断将要下棋的位置是否已经存在棋子;
-FiveInArow.prototype.ifChess = function () {
-    if (this.length > 0) {
-        for (var i = 0; i < this.length; i++) {
-            if (this.newChess.style.left == this.dataStoreX[i] && this.newChess.style.top == this.dataStoreY[i]) {  //判断所下位置是否已经有棋，没有则可插入结点下棋；
-                console.log('这里已经有棋子啦')
-                break;
-            }
-            if (i == this.length - 1) {   //已经遍历到最后一个数据，且与新数据不相等
-                this.colorSet();
-                this.playChess()
-                break;
-            }
-        }
-    } else {
-        this.colorSet()
+FiveInArow.prototype.ifChess = function (x,y) {
+    if(this.dataStore[x][y]!==0){
+        console.log('这里已经有棋子啦')
+        return
+    }else{
+        this.colorSet(x,y)
         this.playChess()
+        this.x=x;
+        this.y=y//记录最新下的一步棋子
     }
 }
 
-//下棋颜色以及两个标志位的设置
-FiveInArow.prototype.colorSet = function () {
+//下棋颜色设置存储以及下个颜色标志位的设置
+FiveInArow.prototype.colorSet = function (x,y) {
     if (this.symbolNext.style.background == 'white') {
         this.newChess.style.background = "white"
         this.symbolNext.style.background = 'black' //改变标志位
+        this.dataStore[x][y]=1
     } else {
         this.newChess.style.background = "black"
         this.symbolNext.style.background = 'white'
+        this.dataStore[x][y]=2
     }
 }
 
 //悔棋
-FiveInArow.prototype.comeBack=function(){
-    var chesses=document.getElementsByClassName('chess')
-    length=chesses.length
-    chesses[length-1].remove()
-    this.dataStoreX.splice(length-1,1)  //注意悔棋之后要删除数据,一个棋子对应一个数据，因此无需再次计算length
-    this.dataStoreY.splice(length-1,1)
-    this.colorSet()  //注意悔棋之后棋子相关颜色及标志位都要回退;
-    this.hasRegret=true
+FiveInArow.prototype.comeBack = function () {
+    var chesses = document.getElementsByClassName('chess')
+    length = chesses.length
+    chesses[length - 1].remove()
+    if (this.dataStore[this.x][this.y] == 1) {//注意悔棋之后棋子相关颜色及标志位都要回退;
+        this.symbolNext.style.background = 'white'
+    }else{
+        this.symbolNext.style.background = 'black'
+    }
+    this.dataStore[this.x][this.y]=0  //设置悔棋位置为无棋
+    this.hasRegret = true
 }
 
 //重新开始
-FiveInArow.prototype.reStart=function(){
-    var chesses=document.getElementsByClassName('chess')
-    for(var i=0,length=chesses.length;i<length;i++){
-       while(chesses[i]){   //踩坑时刻二:注意此处必须加while语句，不加则报错
-           chesses[i].remove()
-       }
+FiveInArow.prototype.reStart = function () {
+    var chesses = document.getElementsByClassName('chess')
+    for (var i = 0, length = chesses.length; i < length; i++) {
+        while (chesses[i]) {   //踩坑时刻二:注意此处必须加while语句，不加则报错
+            chesses[i].remove()
+        }
     }
-    this.dataStoreX=[]  //数据清零;
-    this.dataStoreY=[]
-    if(this.symbolNext.style.background = 'black' ){
-        this.colorSet();  //确保重新开始依然是白方优先;
+    this.initializeArray() //数据清零,重新初始化数组;如果要清空的数组没有引用，空数组赋值无疑是简洁又高效的方法；如果需要保持原数组的属性，那就使用 length=0;而splice()的执行效率最低,而且会返回删除 的元素,即得到一个和原来一样的数组
+    if (this.symbolNext.style.background = 'black') {
+        this.symbolNext.style.background = 'white';  //确保重新开始依然是白方优先;
     }
 }
+
+// FiveInArow.prototype.ifWin = function (chessColor) {  //5个连续的，颜色相同的，在同一坐标线上的
+
+// }
 
 
 newFiveInArow = (function () {
