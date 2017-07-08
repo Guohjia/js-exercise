@@ -10,3 +10,4 @@
 
 ### 五子棋小游戏
 [预览](https://guohjia.github.io/js-exercise/Five-in-a-row/Five-in-a-row.html)
+[说明](https://guohjia.github.io/CODER/FiveInARow/)
