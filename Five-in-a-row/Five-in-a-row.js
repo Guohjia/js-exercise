@@ -1,14 +1,14 @@
 function FiveInArow(board) {
     this.board = board;
-    // this.nextChess = 'white'  //初始化接下来是哪方下棋
     this.symbolNext = document.querySelector('.turn')  //下棋顺序控制
     this.backBtn = document.querySelector('.back')
     this.restartBtn = document.querySelector('.restart')
-    this.symbolNext.style.background = 'white'  //初始化接下来是白方下棋
+    this.symbolNext.style.background = 'white'  //初始化开始是白方下棋
     this.gameOver=false
     this.initializeArray()
     this.bindEvents()
 }
+
 FiveInArow.prototype.initializeArray=function(){
      this.dataStore=new Array(17) 
     for(var x=0;x<=16;x++){          //初始化数组,0为没有走过的，1为白棋走的，2为黑棋走的
@@ -25,7 +25,6 @@ FiveInArow.prototype.bindEvents = function (e) {
         _this.clickY = e.clientY + window.scrollY
         _this.coordinateX = e.target.offsetLeft
         _this.coordinateY = e.target.offsetTop
-        // _this.length = _this.dataStoreX.length
         _this.newChess = document.createElement('div')
         _this.newChess.className = 'chess'
         if(!_this.gameOver){
@@ -146,8 +145,6 @@ FiveInArow.prototype.ifWin = function (x,y,chess) {
     var count2 = 0;
     var count3 = 0;
     var count4 = 0;
-    console.log(x)
-    console.log(y)
 
     for(var i=x;i>=0;i--){
         if(this.dataStore[i][y]!=chess){
@@ -180,7 +177,7 @@ FiveInArow.prototype.ifWin = function (x,y,chess) {
             count2++
         }
     }
-    // console.log(y)
+
     //往左上判断
     for(var i=x,j=y;i>=0&&j>=0;i--,j--){
         if(this.dataStore[i][j]!==chess){
@@ -198,6 +195,7 @@ FiveInArow.prototype.ifWin = function (x,y,chess) {
             count3++
         }
     }
+
     //往右上判断,x增加,y减小
     for(var i=x,j=y;i<=16&&j>=0;i++,j--){
          if(this.dataStore[i][j]!==chess){
