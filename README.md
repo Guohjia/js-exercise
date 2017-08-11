@@ -10,6 +10,7 @@
 
 ### 五子棋小游戏
 [预览](https://guohjia.github.io/js-exercise/Five-in-a-row/Five-in-a-row.html)
+<<<<<<< HEAD
 
 
 ### js设计模式
@@ -20,3 +21,6 @@
 * 单一模式:返回的始终是**同一个对象引用,节约内存**,并不会创建新的对象,只会拿出原来的核心
 * 模块模式:闭包:返回属性和方法,提供属性方法访问的接口
 * 发布订阅模式:事件的异步驱动,更高的可维护性,更优雅的代码实现
+=======
+[说明](https://guohjia.github.io/CODER/FiveInARow/)
+>>>>>>> 5bed4d540dfd49bd9b9aba6203e55f6d4fe4de6b
