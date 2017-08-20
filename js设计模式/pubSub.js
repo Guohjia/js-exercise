@@ -75,7 +75,7 @@ Event.fire('change', '哈哈哈哈')
 
 
 //原生js实现发布订阅,同一个事件类型可有多个处理函数,触发时处理函数均可被调用
-(function Event(){
+var Events=(function Event(){
     var events={}
     function on(evt,handler){
         events[evt]=events[evt]||[] //判读事件类型是否已经存在，如果不存在则初始化为一个空数组，存在则保持;

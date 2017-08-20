@@ -1,4 +1,4 @@
-var single=function(){
+var single=(function(){
     var instance;
     function init(name){
         return {
@@ -13,7 +13,7 @@ var single=function(){
             return instance
         }
     }
-}()
+})()
 
 console.log(single.createPeople('xiaoMing'))  //xiaoMing
 console.log(single.createPeople('xiaoMing'))   //注意依然是xiaoMing
