@@ -16,7 +16,7 @@ Student.prototype=create(People.prototype); //自己原有的继承
 //这个create函数可以用Student.prototype=Object.create(People.prototype)
 function create(parentObj){
     function fn(){}
-    F.prototype=parentObj
+    fn.prototype=parentObj
     return new fn() //原型继承
 };
 
