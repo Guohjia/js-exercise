@@ -1,4 +1,5 @@
 function FiveInArow(board) {
+    alert(1)
     this.board = board;
     this.symbolNext = document.querySelector('.turn')  //下棋顺序控制
     this.backBtn = document.querySelector('.back')
@@ -10,7 +11,7 @@ function FiveInArow(board) {
 }
 
 FiveInArow.prototype.initializeArray=function(){
-     this.dataStore=new Array(17) 
+    this.dataStore=new Array(17) 
     for(var x=0;x<=16;x++){          //初始化数组,0为没有走过的，1为白棋走的，2为黑棋走的
         this.dataStore[x]=new Array(13)
         for(var y=0;y<=12;y++){
