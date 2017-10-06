@@ -88,7 +88,7 @@ var Events=(function Event(){
         if(!events[evt]){
             console.log('触发事件不存在,请先发布挂载')
         }
-        for(var i=0;i<events[evt];i++){
+        for(var i=0;i<events[evt].length;i++){
              events[evt][i].handler(arg) //依次触发订阅事件
         }
     }

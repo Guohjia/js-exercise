@@ -25,6 +25,6 @@ Student.prototype.sayScore=function(){
 }
 
 var xiaoMing=new Student('xiaoMing',20,100)
-
+console.log(xiaoMing)
 //核心:继承原型，并且与自己的原型混合
 
