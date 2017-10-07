@@ -81,7 +81,7 @@ FiveInArow.prototype.positioning = function (clickX, clickY, coordinateX, coordi
         this.newChess.style.top = coordinateY + 21 + 'px'
     }
     var x = parseInt((parseInt(this.newChess.style.left) - 336) / 40);//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
-    var y =(parseInt(this.newChess.style.top ) - 115) / 42;
+    var y =parseInt((parseInt(this.newChess.style.top ) - 115) / 42);
     this.ifChess(x-6,y)
 }
 
