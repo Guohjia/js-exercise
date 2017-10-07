@@ -80,9 +80,9 @@ FiveInArow.prototype.positioning = function (clickX, clickY, coordinateX, coordi
         this.newChess.style.left = coordinateX + 20 + 'px'
         this.newChess.style.top = coordinateY + 21 + 'px'
     }
-    var x = (parseInt(this.newChess.style.left) - 336) / 40;//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
+    var x = parseInt((parseInt(this.newChess.style.left) - 336) / 40);//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
     var y =(parseInt(this.newChess.style.top ) - 115) / 42;
-    this.ifChess(x,y)
+    this.ifChess(x-6,y)
 }
 
 //判断将要下棋的位置是否已经存在棋子;
