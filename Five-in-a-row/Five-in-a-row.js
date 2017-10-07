@@ -82,7 +82,9 @@ FiveInArow.prototype.positioning = function (clickX, clickY, coordinateX, coordi
     }
     var x = parseInt((parseInt(this.newChess.style.left) - 336) / 40);//设置鼠标点击的区域，棋盘横顶点为0~16,纵顶点为0~12
     var y =parseInt((parseInt(this.newChess.style.top ) - 115) / 42);
-    this.ifChess(x-6,y)
+    console.log(x)
+    console.log(y)
+    this.ifChess(x,y)
 }
 
 //判断将要下棋的位置是否已经存在棋子;
