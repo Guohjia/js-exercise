@@ -1,5 +1,4 @@
 function FiveInArow(board) {
-    alert(1)
     this.board = board;
     this.symbolNext = document.querySelector('.turn')  //下棋顺序控制
     this.backBtn = document.querySelector('.back')
