@@ -6,8 +6,9 @@ Function.prototype.newBind =function (context){
     }
 }
 
-function xxx(){
+function xxx(a,b){
     console.log(this)
+    console.log(a,b)
 }
 var a=xxx.newBind({a:1},1,2)
 a()
