@@ -5,7 +5,8 @@
          * 如何执行所有传入的异步状态处理函数 => triggerThen递归,递归出口为thenCache读取完并且状态不为pending
          * 如何实现链式调用?注意状态处理结束时MyPromise的返回
          * 如何进行异常处理？传入了catch则调用catch,没有传入则执行throw;注意返回this,注意resolve/reject时出错status依然为resolved,而executor出错status变成rejected
-         * 疑问:当前操作then之后只是返回当前promise,并没有返回新的 => 遇到无法通过的case再解决吧
+         * 疑问1:当前操作then之后只是返回当前promise,并没有返回新的 => 遇到无法通过的case再解决吧
+         * 疑问1:取消对setTimeout的依赖是否可以实现?
          */
 
          /**
