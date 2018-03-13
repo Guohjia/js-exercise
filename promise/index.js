@@ -15,7 +15,14 @@ function Defer(executor) {
         try {
             executor.call(self, self.resolve.bind(self), self.reject.bind(self));
         } catch (e) {
-            self.reject(e);
+            //执行executor出错
+            if (typeof self.errorHandle === 'function') {
+                self.errorHandle(e)
+                self.status = 'rejected';
+            }else{
+                self.status = 'rejected';
+                throw e;
+            }
         }
     }, 0);
 }
@@ -36,32 +43,57 @@ Defer.prototype = {
         this.thenCache.push({ onFulfilled: onFulfilled, onRejected: onRejected });
         return this;
     },
-    triggerThen: function () {
-        var current = this.thenCache.shift();//移除缓存'
-        var res = null;
-        if (!current) {//成功解析并读取完then cache,也就是可能并没有调用then
-            return this;
+    catch: function (fn) {
+        if (typeof fn === 'function') {
+            this.errorHandle = fn;
         }
-        if (this.status === 'resolved') { //根据状态选择调用缓存中的函数
+        return this;
+    },
+    triggerThen: function () {
+        var current = this.thenCache.shift();//移除缓存
+        var res = null;
+        if (!current && this.status === 'resolved') {//成功解析并读取完then cache
+            return this;
+        } else if (!current && this.status === 'rejected') {//解析失败并读取完then cache，直接调用errorHandle
+            //执行resolve/reject出错
+            if (this.errorHandle) {
+                this.value = this.errorHandle.call(undefined, this.rejectReason);
+                this.status = 'resolved';
+            }else{
+                throw this.rejectReason
+            }
+            return this;
+        };
+        if (this.status === 'resolved') {
             res = current.onFulfilled;
         } else if (this.status === 'rejected') {
             res = current.onRejected;
         }
 
         if (typeof res === 'function') {
-            this.value = res.call(undefined, this.value);//传入缓存值
-            this.status = 'resolved';//只要有处理，则状态为resolved
-            this.triggerThen();// 继续执行then链,最终将返回当前promise对象
+            try {
+                this.value = res.call(undefined, this.value);//传入缓存值
+                this.status = 'resolved';//只要有处理，则状态为resolved
+                this.triggerThen();// 继续执行then链,最终将返回当前promise对象
+            } catch (e) {
+                this.status = 'rejected';//异常，则promise为reject,规则(6)
+                this.rejectReason = e;
+                return this.triggerThen();//触发then链
+            }
         } else {
             this.triggerThen(); // 不是函数继续执行then链,最终将返回当前promise对象
         }
     }
 }
 
-
-
-var myPromise = new Defer((resolve, reject) => { console.log('dosomething...'); resolve('i am resolved')}).then((resolveParam) => {
-    console.log(resolveParam)
-}, (reason) => {
-    console.log(reason)
+var myPromise = new Defer((resolve,reject) => {
+    throw 'hha'
+}).then(()=>{
+    console.log('this is resolve')
+},()=>{
+    console.log('this is reject')
+}).catch((error)=>{
+    console.log('I catch '+error)
 })
+
+console.log(myPromise)
