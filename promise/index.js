@@ -12,7 +12,7 @@
          * @param {Function} executor 传入Promise的执行函数
          * @param {Array} thenCache //对状态处理方式(也就是通常的resolve/reject)进行缓存 => { onFulfilled: onFulfilled, onRejected: onRejected }
          * @param {String} status  //状态处理
-         * @param {any} value  //resolve/reject值传递
+         * @param {any} value  // resolve/reject值传递 =>并且如果resolve有返回值,then链式调用时可以实现值传递
          * @param {Function} errorHandle  //链式调用catch传入的异常处理函数
          * @param {Object}  current  //每次从thenCache中读取的状态处理对象 resolve and reject
          */
@@ -98,7 +98,7 @@
 
                 if (typeof res === 'function') {
                     try {
-                        this.value = res.call(undefined, this.value);//传入缓存值
+                        this.value = res.call(undefined, this.value);//传入缓存值=>then链式调用时实现值传递
                         this.status = 'resolved'; //只要有处理，则状态为resolved
                         this.triggerThen();// 继续执行then链,最终将返回当前promise对象
                     } catch (e) {
@@ -127,15 +127,26 @@
         //     console.log('I catch '+error)
         // })
 
-        var myPromise = new MyPromise((resolve,reject) => {
-            resolve()
-        }).then(()=>{
-            throw 'go error'
-            console.log('this is resolve')
-        },()=>{
-            console.log('this is reject')
-        }).catch((error)=>{
-            console.log('I catch '+error)
-        })
+        // var myPromise = new MyPromise((resolve,reject) => {
+        //     resolve()
+        // }).then(()=>{
+        //     throw 'go error'
+        //     console.log('this is resolve')
+        // },()=>{
+        //     console.log('this is reject')
+        // }).catch((error)=>{
+        //     console.log('I catch '+error)
+        // })
+
+        var myPromise = new MyPromise(function (resolve) {
+            resolve(100);
+        });
+        myPromise.then(function (value) {
+            return value * 2;
+        }).then(function (value) {
+            return value * 2;
+        }).then(function (value) {
+            console.log("2: " + value); // => 100 * 2 * 2
+        });
 
         console.log(myPromise)
