@@ -6,16 +6,16 @@
          * 如何实现链式调用?注意状态处理结束时MyPromise的返回
          * 如何进行异常处理？传入了catch则调用catch,没有传入则执行throw;注意返回this,注意resolve/reject时出错status依然为resolved,而executor出错status变成rejected
          * 疑问1:当前操作then之后只是返回当前promise,并没有返回新的 => 遇到无法通过的case再解决吧
-         * 疑问1:取消对setTimeout的依赖是否可以实现?
+         * 疑问1:取消对setTimeout的依赖是否可以实现？
          */
 
          /**
          * @param {Function} executor 传入Promise的执行函数
-         * @param {Array} thenCache //对状态处理方式(也就是通常的resolve/reject)进行缓存 => { onFulfilled: onFulfilled, onRejected: onRejected }
-         * @param {String} status  //状态处理
-         * @param {any} value  // resolve/reject值传递 =>并且如果resolve有返回值,then链式调用时可以实现值传递
-         * @param {Function} errorHandle  //链式调用catch传入的异常处理函数
-         * @param {Object}  current  //每次从thenCache中读取的状态处理对象 resolve and reject
+         * @param {Array} thenCache 对状态处理方式(也就是通常的resolve/reject)进行缓存 => { onFulfilled: onFulfilled, onRejected: onRejected }
+         * @param {String} status  状态处理
+         * @param {any} value  resolve/reject值传递 =>并且如果resolve有返回值,then链式调用时可以实现值传递
+         * @param {Function} errorHandle  链式调用catch传入的异常处理函数
+         * @param {Object}  current  每次从thenCache中读取的状态处理对象 resolve and reject
          */
         function MyPromise(executor) {
             if (!(this instanceof MyPromise)) {  //必须以构造函数的形式被调用
