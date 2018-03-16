@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Throttle</title>
+    <style>
+        body{
+            height: 3000px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        /* 
+        * 这个函数800ms以内只能执行一次
+        *
+        */
+
+        function throttle(fn,ctx,time){
+            var timer;
+            function throttleFn(){  
+                if(timer){return;}
+                timer=setTimeout(()=>{
+                    fn.call(ctx)
+                    timer=null;
+                },time)
+            }
+
+            return throttleFn
+        }
+
+        
+        function testFn(){
+            console.log('testFn execute')
+            console.log('this is '+this)
+        }
+
+        var throttleTest=throttle(testFn,'testThis',3000)
+        window.onscroll=function(){
+            throttleTest()
+        }
+    </script>
+</body>
+
+</html>
