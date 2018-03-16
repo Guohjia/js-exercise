@@ -24,7 +24,7 @@
             function throttleFn(){  
                 if(timer){return;}
                 timer=setTimeout(()=>{
-                    fn.call(ctx)
+                    fn.apply(ctx,arguments)
                     timer=null;
                 },time)
             }
@@ -33,14 +33,15 @@
         }
 
         
-        function testFn(){
+        function testFn(a,b){
             console.log('testFn execute')
             console.log('this is '+this)
+            console.log('params are '+a+','+b)
         }
 
         var throttleTest=throttle(testFn,'testThis',3000)
         window.onscroll=function(){
-            throttleTest()
+            throttleTest('params1','params2')
         }
     </script>
 </body>
