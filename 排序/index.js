@@ -19,6 +19,7 @@ function bubble(arr) {
 
 
 //选择排序  //o(n平方)  //注意是在i后面的一个元素开始比较,所以var j=i+1
+//时间复杂度与冒泡相同  冒泡是每一轮确定一个最大的 选择是每一轮确定一个最小的;
 function select(arr) {
     // var i, j
     for (var i = 0; i < arr.length - 1; i++) { //外层循环一次确定一个,一共进行length-1轮
@@ -37,32 +38,48 @@ function select(arr) {
     return arr
 }
 
-    //时间复杂度与冒泡相同  冒泡是每一轮确定一个最大的 选择是每一轮确定一个最小的;
-    function merge(leftArr,rightArr){
-        var re=[];
-        while(leftArr.length>0&&rightArr.length>0){ //不断获取最前面的元素,直到其中一个数组为空
-            if(leftArr[0]<rightArr[0]){
-                re.push(leftArr.shift())
-            }else{
-                re.push(rightArr.shift())
-            }
-        }
 
-        //两边数组长度不相等可以直接合并
-        return re.concat(leftArr).concat(rightArr)
-    }
 
-    function mergeSort(arr){
-        if(arr.length === 1){return arr;}
-        var mid=Math.floor(arr.length/2),leftArr=arr.slice(0,mid),rightArr=arr.slice(mid)
-        return merge(mergeSort(leftArr),mergeSort(rightArr))
-    }
 
 //归并排序  O(nlog2n)  空间复杂度: O(n)
+function merge(leftArr, rightArr) {
+    var re = [];
+    while (leftArr.length > 0 && rightArr.length > 0) { //不断获取最前面的元素,直到其中一个数组为空
+        if (leftArr[0] < rightArr[0]) {
+            re.push(leftArr.shift())
+        } else {
+            re.push(rightArr.shift())
+        }
+    }
 
+    //两边数组长度不相等可以直接合并
+    return re.concat(leftArr).concat(rightArr)
+}
 
- 
-//快速排序  O(nlog2n)  空间复杂度: O(log2n)
+function mergeSort(arr) {
+    if (arr.length === 1) { return arr; }
+    var mid = Math.floor(arr.length / 2), leftArr = arr.slice(0, mid), rightArr = arr.slice(mid)
+    return merge(mergeSort(leftArr), mergeSort(rightArr))
+}
+
+//希尔排序  时间复杂度:O(nlog2n)  空间复杂度: O(log2n)
+function shellSort(arr){  
+    var gap =Math.floor(arr.length/2); //设置增量取值
+    while(gap>=1){  
+        for(var i =gap;i<arr.length;i++){  
+            var j,temp=arr[i];  
+            for(j=i-gap;j>=0&&temp<arr[j];j=j-gap){
+                arr[j+gap]=arr[j];  
+            }  
+            arr[j+gap]=temp;  
+        }  
+        console.log("gap="+gap);  
+        console.log(arr);  
+        gap=Math.floor(gap/2);   //增量取值减半
+    }  
+}
+
+//快速排序  时间复杂度:O(nlog2n)  空间复杂度: O(log2n)
 var quickSort = function (arr) {
     if (arr.length <= 1) { return arr; }  //递归出口
     var pivotIndex = Math.floor(arr.length / 2); //选择一个排序的基准
@@ -106,7 +123,7 @@ function insertionSort(myArray) {
     return myArray;
 }
 console.log(insertionSort([5, 4, 3, 2, 5, 6, 7, 10]))
-         //空间复杂度 o(1) //时间复杂度 o(n平方)  //稳定
+//空间复杂度 o(1) //时间复杂度 o(n平方)  //稳定
 
 
 
