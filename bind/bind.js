@@ -1,14 +1,16 @@
-Function.prototype.newBind =function (context){
-    var self=this;
+Function.prototype.mybind = function(){
+    var _arg = [].slice.call(arguments),_newThis = _arg.shift(),_this=this;
     return function(){
-         //这里的self就是调用函数
-        return self.apply(context)
+        return _this.apply(_newThis,_arg)
     }
 }
 
-function xxx(a,b){
+
+function test(a,b){
     console.log(this)
     console.log(a,b)
 }
-var a=xxx.newBind({a:1},1,2)
-a()
+
+var newTest = test.mybind('newThis','arg1','arg2')
+
+newTest();

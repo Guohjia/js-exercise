@@ -36,10 +36,32 @@ function select(arr) {
     }
     return arr
 }
-// console.log(select([5, 4, 3, 2, 5, 6, 7, 10]))
 
-//时间复杂度与冒泡相同  冒泡是每一轮确定一个最大的 选择是每一轮确定一个最小的;
+    //时间复杂度与冒泡相同  冒泡是每一轮确定一个最大的 选择是每一轮确定一个最小的;
+    function merge(leftArr,rightArr){
+        var re=[];
+        while(leftArr.length>0&&rightArr.length>0){ //不断获取最前面的元素,直到其中一个数组为空
+            if(leftArr[0]<rightArr[0]){
+                re.push(leftArr.shift())
+            }else{
+                re.push(rightArr.shift())
+            }
+        }
 
+        //两边数组长度不相等可以直接合并
+        return re.concat(leftArr).concat(rightArr)
+    }
+
+    function mergeSort(arr){
+        if(arr.length === 1){return arr;}
+        var mid=Math.floor(arr.length/2),leftArr=arr.slice(0,mid),rightArr=arr.slice(mid)
+        return merge(mergeSort(leftArr),mergeSort(rightArr))
+    }
+
+//归并排序  O(nlog2n)  空间复杂度: O(n)
+
+
+ 
 //快速排序  O(nlog2n)  空间复杂度: O(log2n)
 var quickSort = function (arr) {
     if (arr.length <= 1) { return arr; }  //递归出口
