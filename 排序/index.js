@@ -62,7 +62,7 @@ function mergeSort(arr) {
     return merge(mergeSort(leftArr), mergeSort(rightArr))
 }
 
-//希尔排序  时间复杂度:O(nlog2n)  空间复杂度: O(log2n)
+//希尔排序  时间复杂度:O(n^1.3)   空间复杂度: O(1) 不稳定
 function shellSort(arr){  
     var gap =Math.floor(arr.length/2); //设置增量取值
     while(gap>=1){  
