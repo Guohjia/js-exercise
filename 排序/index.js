@@ -83,14 +83,16 @@ function shellSort(arr){
 var quickSort = function (arr) {
     if (arr.length <= 1) { return arr; }  //递归出口
     var pivotIndex = Math.floor(arr.length / 2); //选择一个排序的基准
-    var pivot = arr[pivotIndex];   //找出基准值
+    var pivot = arr[pivotIndex];   //找出基准值=>必须有基准值,不能同arr[pivot]代替
     var left = [];
     var right = [];
     for (var i = 0; i < arr.length; i++) {
-        if (arr[i] > pivot) {
-            right.push(arr[i]);
-        } else if(arr[i] < pivot){
-            left.push(arr[i]);
+        if(i!== pivotIndex){
+            if (arr[i] > pivot) {
+                right.push(arr[i]);
+            } else {
+                left.push(arr[i]);
+            }
         }
     }
     return quickSort(left).concat([pivot],quickSort(right));
